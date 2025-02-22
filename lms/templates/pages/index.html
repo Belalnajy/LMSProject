@@ -1,0 +1,246 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+
+    <!-- Statistics -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">Total Number of Books</h3>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="d-flex">
+                  <p class="d-flex flex-column">
+                    <span class="text-bold text-lg">{{count_book}}</span>
+                    <span>Total Number of Books</span>
+                  </p>
+                </div>
+                <!-- /.d-flex -->
+
+                <div class="position-relative mb-4">
+                  <canvas id="visitors-chart" height="200"></canvas>
+                </div>
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col-md-6 -->
+
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">Profits</h3>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="d-flex">
+                  <p class="d-flex flex-column">
+                    <span id="totalsalarys" class="text-bold text-lg">$250</span
+                    ><br />
+                  </p>
+                </div>
+                <!-- /.d-flex -->
+
+                <div class="position-relative mb-4">
+                  <canvas id="sales-chart" height="160"></canvas>
+                </div>
+
+                <div class="d-flex flex-row justify-content-end">
+                  <span class="mr-2">
+                    <i class="fas fa-square text-primary"></i> Profits from Book
+                    Sales
+                    <p id="soldtotals"></p>
+                  </span>
+                  <span>
+                    <i class="fas fa-square text-gray"></i> Profits from Book
+                    Rentals
+                    <p id="rentedtotals"></p>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- /.col-md-6 -->
+        </div>
+        <!-- /.row -->
+
+        <!-- Add books form -->
+        <div class="row m-1 mb-3">
+          <a href="#bookform" class="btn btn-primary" data-toggle="collapse">
+            + Add Book
+          </a>
+        </div>
+
+        <div id="bookform" class="card card-primary collapse">
+          <div class="card-header">
+            <h3 class="card-title">Add Book</h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="card-body">{{form}}</div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- /.card -->
+      </div>
+      <!-- End form add books -->
+
+      <!-- Categories -->
+
+      <div class="row justify-content-center mb-3">
+        <div class="col-4">
+          <ul class="nav">
+            {% for category in categories|slice:":5" %}
+            <li class="nav-item">
+              <a
+                class="nav-link bg-primary category-link"
+                href="#"
+                data-category-id="{{ category.id }}"
+                >{{ category.name }}</a
+              >
+            </li>
+            {% endfor %}
+            <li class="nav-item">
+              <a
+                class="nav-link bg-primary category-link"
+                href="#"
+                data-category-id="all"
+                >All</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- books -->
+
+      <div class="row">
+        <!-- Book End -->
+        {% for book in books %}
+        <!-- Books -->
+        <div
+          id=""
+          class="col-md-4 book-hide book{{book.id}} category{{book.category.id}} book{{book.status}}">
+          <!-- Widget: user widget style 1 -->
+          <div id="" class="card card-widget widget-user">
+            <!-- Add the bg color to the header using any of the bg-* classes -->
+            <!-- Dropdown menu -->
+            <div style="position: absolute" class="btn-group">
+              <button
+                type="button"
+                class="btn dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'update' book.id %}"
+                  >Update</a
+                >
+                <a class="dropdown-item" href="{% url 'delete' book.id %}"
+                  >Delete</a
+                >
+              </div>
+            </div>
+            {% if book.book_image %}
+            <div
+              style="background: url({{book.book_image.url}}); background-size: cover"
+              class="widget-user-header bg-info">
+              {% else %}
+              <div class="widget-user-header bg-info">
+                {% endif %}
+                <h3 class="widget-user-username">{{book.title}}</h3>
+                <h5 class="widget-user-desc">{{book.author}}</h5>
+              </div>
+              <div class="widget-user-image">
+                {% if book.author_image %}
+                <img
+                  style="width: 100px; height: 100px"
+                  class="img-circle elevation-2"
+                  src="{{book.author_image.url}}"
+                  alt="User Avatar" />
+                {% endif %}
+              </div>
+              <div class="card-footer">
+                <div class="row">
+                  <div class="col-sm-4 border-right">
+                    <div class="description-block">
+                      <h5 class="description-header">{{book.pages}}</h5>
+                      <span class="description-text">Pages</span>
+                    </div>
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-4 border-right">
+                    <div class="description-block">
+                      {% if book.price %}
+                      <h5 class="description-header">${{book.price}}</h5>
+                      <span class="description-text">Price</span>
+                      {% elif book.retal_price_day %}
+                      <h5 class="description-header">
+                        ${{book.retal_price_day}}
+                      </h5>
+                      <span class="description-text">Rent Price</span>
+                      {% else %}
+                      <h5 class="description-header">Free</h5>
+                      <span class="description-text">Price</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-4">
+                    <div class="description-block">
+                      {% if book.status == 'available' %}
+                      <h5 class="description-header text-success">
+                        {{book.status}}
+                      </h5>
+                      {% elif book.status == 'rented' %}
+                      <h5 class="description-header text-warning">
+                        {{book.status}}
+                      </h5>
+                      {% else %}
+                      <h5 class="description-header text-danger">
+                        {{book.status}}
+                      </h5>
+                      {% endif %}
+                      <span class="description-text">Status</span>
+                    </div>
+                  </div>
+                  <!-- /.col -->
+                </div>
+                <!-- /.row -->
+              </div>
+            </div>
+            <!-- /.widget-user -->
+          </div>
+          <!-- End of book -->
+          {% endfor %}
+          <div class="row">
+            <div class="col text-center">
+              <!-- Add an image here if there are no books -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  {% endblock content %}
+</div>

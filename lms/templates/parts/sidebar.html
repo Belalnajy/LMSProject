@@ -1,0 +1,99 @@
+<!-- Main Sidebar Container -->
+<aside
+  style="position: fixed"
+  class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+  <a href="#" class="brand-link">
+    <span class="brand-text font-weight-light">NAGY</span>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="image"></div>
+      <div class="info">
+        <a href="{% url 'index' %}" class="d-block">Belal Nagy </a>
+      </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul
+        class="nav nav-pills nav-sidebar flex-column"
+        data-widget="treeview"
+        role="menu"
+        data-accordion="false">
+        <li class="nav-item">
+          <a href="{% url 'books' %}" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <p>New Books</p>
+          </a>
+        </li>
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-copy"></i>
+            <p>
+              Category
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a id="addcat" href="#" class="nav-link">
+                <i class="fa fa-plus"></i>
+                <p class="text-light">Add New</p>
+              </a>
+            </li>
+            <form id="cat" method="POST">
+              <div id="catinput">
+                {% csrf_token %} {{category_form}}
+                <button type="submit" class="btn btn-success">save</button>
+                <button id="backcat" class="btn btn-primary">back</button>
+              </div>
+            </form>
+            <li style="cursor: pointer" class="nav-item nav-side">
+              <a id="" class="nav-link side-cat categoryall" data-category-id="all">
+                <i class="far fa-circle nav-icon"></i>
+                <p>All</p>
+              </a>
+            </li>
+            {% for category in categories %}
+            <li style="cursor: pointer" class="nav-item nav-side">
+              <a
+                id=""
+                class="nav-link side-cat category{{category.id}}"
+                data-category-id="{{category.id}}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>{{category.name}}</p>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
+
+        <li class="nav-header">Status</li>
+        <li style="cursor: pointer" class="nav-item statussold">
+          <a id="" class="nav-link">
+            <i class="nav-icon far fa-circle text-danger"></i>
+            <p class="text">Sold</p>
+          </a>
+        </li>
+        <li style="cursor: pointer" class="nav-item statusrented">
+          <a id="" class="nav-link">
+            <i class="nav-icon far fa-circle text-warning"></i>
+            <p>Rented</p>
+          </a>
+        </li>
+        <li style="cursor: pointer" class="nav-item statusavailable">
+          <a id="" class="nav-link">
+            <i class="nav-icon far fa-circle text-info"></i>
+            <p>Available</p>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>
