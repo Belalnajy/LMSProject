@@ -33,6 +33,19 @@
           </div>
           <!-- /.col-md-6 -->
 
+          <!-- {%for book in books%}
+              {%if book.price != None%} 
+              {%if book.status == 'sold'%}
+                <p class="totalprice">{{book.price}}</p>
+              {%endif%}
+              {%endif%}
+              {% if book.total_rental != None%}
+              {%if book.status == 'rented'%}
+                <p class="totalprice">{{book.total_rental}}</p>
+              {%endif%}
+              {%endif%}
+            {%endfor%} -->
+
           <div class="col-lg-6">
             <div class="card">
               <div class="card-header border-0">
@@ -43,7 +56,8 @@
               <div class="card-body">
                 <div class="d-flex">
                   <p class="d-flex flex-column">
-                    <span id="totalsalarys" class="text-bold text-lg">$250</span
+                    <span id="totalsalarys" class="text-bold text-lg"
+                      >${{total_sum}}</span
                     ><br />
                   </p>
                 </div>
@@ -134,7 +148,7 @@
         <!-- Books -->
         <div
           id=""
-          class="col-md-4 book-hide book{{book.id}} category{{book.category.id}} book{{book.status}}">
+          class="col-md-3 book-hide book{{book.id}} category{{book.category.id}} book{{book.status}}">
           <!-- Widget: user widget style 1 -->
           <div id="" class="card card-widget widget-user">
             <!-- Add the bg color to the header using any of the bg-* classes -->

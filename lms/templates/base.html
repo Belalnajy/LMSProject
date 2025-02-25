@@ -92,26 +92,33 @@ $(function () {
 
       ],
 
-
+      
       datasets: [
         {
           backgroundColor: '#007bff',
           borderColor    : '#007bff',
           data           : [ 
-               '50',
+          {%if total_sold != None%}
+
+               '{{total_sold}}',
+               {%endif%}
+
           ]
         },
         {
           backgroundColor: '#ced4da',
           borderColor    : '#ced4da',
           data           : [ 
-                '30',
+          {%if total_rental != None%}
+
+            
+                '{{total_rental}}',
+                {%endif%}
           ]
         }
       ]
     },
 
-   
    
    options: {
       maintainAspectRatio: false,
@@ -256,14 +263,24 @@ $(document).ready(function() {
       $('.category' + categoryId).show();
     }
   });
+  $('#retal_period').keyup(function(){
+    var rental_period = $('#retal_period').val();
+    var rental_price = $('#retal_price_day').val();
+    var total = rental_period * rental_price;
+    $('#total_rental').val(total);
+  });
 });
 
-$('#retal_period').keyup(function(){
-  var rental_period = $('#retal_period').val();
-  var rental_price = $('#retal_price_day').val();
-  var total = rental_period * rental_price;
-  $('#total_rental').val(total);
-})
+
+// $('.totalprice').hide();
+//   var total = 0;
+// $('.totalprice').each(function(){
+//   total += parseInt($(this).text());
+//   $('#totalprice').text(total);
+// });
+// $('#totalsalarys').text(total);
+// });
+
 </script>
 </body>
 </html>
